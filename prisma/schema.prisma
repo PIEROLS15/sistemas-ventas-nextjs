@@ -1,0 +1,78 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String  @id @default(uuid())
+  firstName  String
+  lastName   String
+  email      String  @unique
+  password   String
+  resetToken String?
+  roleId     Int
+  role       Role    @relation(fields: [roleId], references: [id])
+  Sale       Sale[]
+}
+
+model Role {
+  id    Int      @id @default(autoincrement())
+  name  RoleType @unique
+  users User[]
+}
+
+enum RoleType {
+  ADMIN
+  SELLER
+}
+
+model Product {
+  id         String       @id @default(uuid())
+  sku        String       @unique
+  name       String
+  price      Decimal      @default(0.00)
+  stock      Int          @default(0)
+  SaleDetail SaleDetail[]
+}
+
+model Sale {
+  id                   String             @id @default(uuid())
+  saleCode             String             @unique
+  customerName         String
+  identificationId     Int
+  identification       IdentificationType @relation(fields: [identificationId], references: [id])
+  identificationNumber String
+  email                String?
+  sellerId             String
+  seller               User               @relation(fields: [sellerId], references: [id])
+  totalAmount          Decimal            @default(0.00)
+  saleDate             DateTime           @default(now())
+  saleTime             String
+  SaleDetail           SaleDetail[]
+}
+
+model IdentificationType {
+  id   Int    @id @default(autoincrement())
+  type IDType @unique
+  Sale Sale[]
+}
+
+enum IDType {
+  DNI
+  RUC
+}
+
+model SaleDetail {
+  id        String  @id @default(uuid())
+  saleId    String
+  sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+  unitPrice Decimal @default(0.00)
+  subtotal  Decimal @default(0.00)
+}
