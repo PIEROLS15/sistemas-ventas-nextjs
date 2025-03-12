@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id         String  @id @default(uuid())
+  id         Int     @id @default(autoincrement())
   firstName  String
   lastName   String
   email      String  @unique
@@ -31,7 +31,7 @@ enum RoleType {
 }
 
 model Product {
-  id         String       @id @default(uuid())
+  id         Int          @id @default(autoincrement())
   sku        String       @unique
   name       String
   price      Decimal      @default(0.00)
@@ -40,14 +40,14 @@ model Product {
 }
 
 model Sale {
-  id                   String             @id @default(uuid())
+  id                   Int                @id @default(autoincrement())
   saleCode             String             @unique
   customerName         String
   identificationId     Int
   identification       IdentificationType @relation(fields: [identificationId], references: [id])
   identificationNumber String
   email                String?
-  sellerId             String
+  sellerId             Int
   seller               User               @relation(fields: [sellerId], references: [id])
   totalAmount          Decimal            @default(0.00)
   saleDate             DateTime           @default(now())
@@ -67,10 +67,10 @@ enum IDType {
 }
 
 model SaleDetail {
-  id        String  @id @default(uuid())
-  saleId    String
+  id        Int     @id @default(autoincrement())
+  saleId    Int
   sale      Sale    @relation(fields: [saleId], references: [id], onDelete: Cascade)
-  productId String
+  productId Int
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int     @default(1)
   unitPrice Decimal @default(0.00)

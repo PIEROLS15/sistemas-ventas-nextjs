@@ -1,5 +1,7 @@
 import { PrismaClient, $Enums } from '@prisma/client';
 
+// Para ejecutar e insertar datos: npx tsx prisma/seed.ts
+
 const prisma = new PrismaClient();
 
 async function main() {

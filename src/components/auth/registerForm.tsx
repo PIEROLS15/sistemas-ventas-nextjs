@@ -1,24 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Loader2 } from "lucide-react"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Loader2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 
-
 const RegisterForm = () => {
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
+    const router = useRouter();
 
     const [form, setForm] = useState({
-        nombre: "",
-        apellido: "",
-        correo: "",
-        contrasena: "",
-        repetirContrasena: ""
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+        confirmPassword: ""
     });
-
-    const API_BACKEND = process.env.NEXT_PUBLIC_API_BACKEND;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,7 +26,7 @@ const RegisterForm = () => {
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (form.contrasena !== form.repetirContrasena) {
+        if (form.password !== form.confirmPassword) {
             toast.error("Las contraseñas no coinciden");
             return;
         }
@@ -35,53 +34,44 @@ const RegisterForm = () => {
         setIsLoading(true);
 
         try {
-            const response = await fetch(`${API_BACKEND}/api/register`, {
+            const response = await fetch(`/api/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    nombre: form.nombre,
-                    apellido: form.apellido,
-                    correo: form.correo,
-                    password: form.contrasena
+                    firstName: form.firstName,
+                    lastName: form.lastName,
+                    email: form.email,
+                    password: form.password
                 })
             });
 
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(JSON.stringify(data));
+                throw new Error(data.message || "Error en el registro");
             }
+
+            // Guardar el token en localStorage
+            localStorage.setItem("token", data.token);
 
             toast.success("Registro exitoso");
-        } catch (error: unknown) {
-            let errorMessage = "Error en el registro";
 
-            if (error instanceof Error) {
-                try {
-                    const parsedError = JSON.parse(error.message);
-                    errorMessage = parsedError.message || errorMessage;
-                } catch {
-                    errorMessage = error.message;
-                }
-            } else if (typeof error === "object" && error !== null) {
-                if ("message" in error && typeof error.message === "string") {
-                    errorMessage = error.message;
-                } else {
-                    errorMessage = JSON.stringify(error);
-                }
-            }
-            toast.error(errorMessage);
+            // Redirigir al usuario a /dashboard
+            router.push("/dashboard");
+
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : "Error en el registro");
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     };
 
     const fields = [
-        { id: "nombre", name: "nombre", label: "Nombres Completos", type: "text", placeholder: "Ingresa tus nombres" },
-        { id: "apellido", name: "apellido", label: "Apellidos Completos", type: "text", placeholder: "Ingresa tus apellidos" },
-        { id: "correo", name: "correo", label: "Correo electrónico", type: "email", placeholder: "Ingresa tu correo electrónico" },
-        { id: "contrasena", name: "contrasena", label: "Contraseña", type: "password", placeholder: "••••••••" },
-        { id: "repetirContrasena", name: "repetirContrasena", label: "Confirmar contraseña", type: "password", placeholder: "••••••••" },
+        { id: "firstName", name: "firstName", label: "Nombres", type: "text", placeholder: "Ingresa tus nombres" },
+        { id: "lastName", name: "lastName", label: "Apellidos", type: "text", placeholder: "Ingresa tus apellidos" },
+        { id: "email", name: "email", label: "Correo electrónico", type: "email", placeholder: "Ingresa tu correo" },
+        { id: "password", name: "password", label: "Contraseña", type: "password", placeholder: "••••••••" },
+        { id: "confirmPassword", name: "confirmPassword", label: "Confirmar contraseña", type: "password", placeholder: "••••••••" },
     ];
 
     return (
@@ -105,7 +95,7 @@ const RegisterForm = () => {
             </Button>
             <ToastContainer position="top-right" autoClose={1000} toastClassName="toast-custom" />
         </form>
-    )
-}
+    );
+};
 
 export default RegisterForm;
