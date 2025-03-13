@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
+import { signIn } from "next-auth/react";
 
 const RegisterForm = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -41,8 +42,8 @@ const RegisterForm = () => {
                     firstName: form.firstName,
                     lastName: form.lastName,
                     email: form.email,
-                    password: form.password
-                })
+                    password: form.password,
+                }),
             });
 
             const data = await response.json();
@@ -51,8 +52,16 @@ const RegisterForm = () => {
                 throw new Error(data.message || "Error en el registro");
             }
 
-            // Guardar el token en localStorage
-            localStorage.setItem("token", data.token);
+            // Iniciar sesión automáticamente después del registro
+            const result = await signIn("credentials", {
+                redirect: false,
+                email: form.email,
+                password: form.password,
+            });
+
+            if (result?.error) {
+                throw new Error(result.error);
+            }
 
             toast.success("Registro exitoso");
 

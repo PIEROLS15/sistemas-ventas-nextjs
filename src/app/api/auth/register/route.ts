@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import prisma from "@/lib/prisma";
+import jwt from "jsonwebtoken";
 
-const SECRET_KEY = process.env.JWT_SECRET || "super_secreto";
+const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 
 export async function POST(req: Request) {
     try {
@@ -31,9 +31,22 @@ export async function POST(req: Request) {
             },
         });
 
-        const token = jwt.sign({ userId: newUser.id, role: newUser.roleId }, SECRET_KEY, { expiresIn: "1h" });
+        // Generar un token JWT
+        const token = jwt.sign(
+            {
+                id: newUser.id,
+                firstName: newUser.firstName,
+                lastName: newUser.lastName,
+                email: newUser.email,
+                roleId: newUser.roleId,
+            },
+            JWT_SECRET,
+            { expiresIn: "1h" }
+        );
 
-        return NextResponse.json({ message: "Usuario registrado con éxito", token, user: newUser }, { status: 201 });
+        // Devolver el token en la respuesta
+        return NextResponse.json({ message: "Usuario registrado con éxito", user: newUser, token }, { status: 201 });
+
     } catch (error) {
         console.error(error);
         return NextResponse.json({ message: "Error interno del servidor" }, { status: 500 });

@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Users, Settings, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,15 +15,19 @@ import { FaRegUser } from "react-icons/fa";
 
 const DropdownProfile = () => {
     const { data: session } = useSession();
+    const router = useRouter();
     const user = session?.user;
 
     const firstName = user?.firstName?.split(" ")[0] || "";
     const lastName = user?.lastName?.split(" ")[0] || "";
 
     const handleLogout = async () => {
-        await signOut({ callbackUrl: "/" });
-    };
+        await signOut({ redirect: false });
 
+        localStorage.removeItem("token");
+
+        router.push("/");
+    };
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
