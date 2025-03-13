@@ -97,7 +97,7 @@ const authOptions: NextAuthOptions = {
         strategy: "jwt",
     },
     pages: {
-        signIn: "/", // Redirigir al home en lugar de /api/auth/signin
+        signIn: "/",
     }
 };
 

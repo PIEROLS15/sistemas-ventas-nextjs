@@ -6,10 +6,10 @@ export default withAuth(
     async function middleware(request: NextRequestWithAuth) {
         const token = await getToken({ req: request });
 
-        // Si no hay token, redirigir a la página de inicio sin parámetros
+        // Si no hay token, redirigir a la página de inicio
         if (!token) {
             const url = new URL("/", request.url);
-            return NextResponse.redirect(url.origin); // Redirigir sin parámetros
+            return NextResponse.redirect(url.origin);
         }
         return NextResponse.next();
     },

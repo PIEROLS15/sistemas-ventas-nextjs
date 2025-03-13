@@ -2,14 +2,9 @@
 
 import type React from "react"
 import Link from "next/link"
-import {
-    ShoppingCart,
-    Menu
-} from "lucide-react"
-
+import { ShoppingCart, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-
 import ThemeToggle from "@/components/ui/themeToggle"
 import DropdownProfile from "./dropdownProfile"
 
@@ -17,7 +12,7 @@ import DropdownProfile from "./dropdownProfile"
 const HeaderDashboard = () => {
     return (
         <header className="sticky top-0 z-40 border-b bg-background">
-            <div className="container flex h-16 items-center justify-between py-4">
+            <div className="container mx-auto max-w-[1200px] px-4 flex h-16 items-center justify-between py-4">
                 <div className="flex items-center gap-2 md:gap-4">
                     <Sheet>
                         <SheetTrigger asChild>
@@ -28,14 +23,14 @@ const HeaderDashboard = () => {
                         </SheetTrigger>
                         <SheetContent side="left" className="pr-0">
                             <div className="px-7">
-                                <Link href="/" className="flex items-center gap-2 font-semibold">
+                                <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
                                     <ShoppingCart className="h-6 w-6 text-primary" />
                                     <span>Sistema de Ventas</span>
                                 </Link>
                             </div>
                         </SheetContent>
                     </Sheet>
-                    <Link href="/" className="hidden items-center gap-2 font-semibold md:flex">
+                    <Link href="/dashboard" className="hidden items-center gap-2 font-semibold md:flex">
                         <ShoppingCart className="h-6 w-6 text-primary" />
                         <span>Sistema de Ventas</span>
                     </Link>

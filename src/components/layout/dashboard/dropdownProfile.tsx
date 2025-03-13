@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { Users, Settings, LogOut } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -33,7 +33,6 @@ const DropdownProfile = () => {
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                     <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder-user.jpg" alt="Avatar" />
                         <AvatarFallback><FaRegUser /></AvatarFallback>
                     </Avatar>
                 </Button>
