@@ -96,6 +96,9 @@ const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
+    pages: {
+        signIn: "/", // Redirigir al home en lugar de /api/auth/signin
+    }
 };
 
 const handler = NextAuth(authOptions);
