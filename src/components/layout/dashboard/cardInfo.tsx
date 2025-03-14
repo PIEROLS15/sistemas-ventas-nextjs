@@ -2,34 +2,102 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Users, Package, ShoppingCart, DollarSign, TrendingUp, TrendingDown } from "lucide-react"
+import { useEffect, useState } from "react"
 
 const CardInfo = () => {
+    const [userCount, setUserCount] = useState(0);
+    const [productCount, setProductCount] = useState(0);
+    const [totalSalesCount, setTotalSalesCount] = useState(0);
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch('/api/users');
+                const data = await response.json();
+                setUserCount(data.length);
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.error('Error fetching users:', error);
+                } else {
+                    console.error('Unknown error:', error);
+                }
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    useEffect(() => {
+        const fetchProducts = async () => {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+                setProductCount(data.length);
+            } catch (error) {
+                if (error instanceof Error) {
+                    console.error('Error fetching products:', error);
+                } else {
+                    console.error('Unknown error:', error);
+                }
+            }
+        };
+
+        fetchProducts();
+    }, []);
+
+    useEffect(() => {
+        const fetchSalesSummary = async () => {
+            try {
+                const response = await fetch('/api/sales/summary');
+                if (!response.ok) {
+                    throw new Error('Error al obtener el resumen de ventas');
+                }
+                const data = await response.json();
+                setTotalSalesCount(data.totalSalesCount);
+                setTotalIncome(data.totalIncome);
+            } catch (error) {
+                if (error instanceof Error) {
+                    setError(error.message);
+                } else {
+                    setError('An unknown error occurred');
+                }
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchSalesSummary();
+    }, []);
+
     // Datos de ejemplo
     const stats = [
         {
             title: "Usuarios Totales",
-            value: "2,853",
+            value: userCount.toString(),
             icon: Users,
             change: "+12.5%",
             trend: "up",
         },
         {
             title: "Productos",
-            value: "1,245",
+            value: productCount.toString(),
             icon: Package,
             change: "+3.2%",
             trend: "up",
         },
         {
             title: "Ventas",
-            value: "12,234",
+            value: totalSalesCount.toString(),
             icon: ShoppingCart,
             change: "+18.7%",
             trend: "up",
         },
         {
             title: "Ingresos",
-            value: "$45,678",
+            value: "S/ " + totalIncome.toString(),
             icon: DollarSign,
             change: "-2.5%",
             trend: "down",
