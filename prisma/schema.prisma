@@ -8,14 +8,17 @@ datasource db {
 }
 
 model User {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   firstName  String
   lastName   String
-  email      String  @unique
+  email      String   @unique
   password   String
   resetToken String?
   roleId     Int
-  role       Role    @relation(fields: [roleId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  isActive   Boolean  @default(true)
+  role       Role     @relation(fields: [roleId], references: [id])
   Sale       Sale[]
 }
 
@@ -36,6 +39,8 @@ model Product {
   name       String
   price      Decimal      @default(0.00)
   stock      Int          @default(0)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
   SaleDetail SaleDetail[]
 }
 
