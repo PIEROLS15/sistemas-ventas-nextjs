@@ -37,8 +37,8 @@ const navItems: NavItem[] = [
         icon: Package,
     },
     {
-        title: "Clientes",
-        href: "/dashboard/clientes",
+        title: "Usuarios",
+        href: "/dashboard/users",
         icon: Users,
     },
     {
