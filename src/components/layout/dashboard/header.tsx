@@ -12,7 +12,7 @@ import DropdownProfile from "./dropdownProfile"
 const HeaderDashboard = () => {
     return (
         <header className="sticky top-0 z-40 border-b bg-background">
-            <div className="container mx-auto max-w-[1200px] px-4 flex h-16 items-center justify-between py-4">
+            <div className="container mx-auto max-w-[1400px] px-4 flex h-16 items-center justify-between py-4">
                 <div className="flex items-center gap-2 md:gap-4">
                     <Sheet>
                         <SheetTrigger asChild>

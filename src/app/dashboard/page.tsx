@@ -4,10 +4,11 @@ import DateRangePicker from "@/components/layout/dashboard/dateRangePicker";
 import InventoryStatus from "@/components/layout/dashboard/inventoryStatus";
 import RecentSales from "@/components/layout/dashboard/recentSales";
 import TopProducts from "@/components/layout/dashboard/topProducts";
+import DashboardShell from "@/components/layout/dashboardShell";
 
 const Dashboard = () => {
     return (
-        <section className="flex-1 space-y-4 p-4 pt-6 md:p-8">
+        <DashboardShell>
             <DashboardHeader heading="Dashboard" text="Visualiza las métricas clave de tu negocio">
                 <DateRangePicker />
             </DashboardHeader>
@@ -17,7 +18,7 @@ const Dashboard = () => {
                 <InventoryStatus className="h-full" />
             </div>
             <TopProducts />
-        </section>
+        </DashboardShell>
     );
 }
 

@@ -9,8 +9,6 @@ const CardInfo = () => {
     const [productCount, setProductCount] = useState(0);
     const [totalSalesCount, setTotalSalesCount] = useState(0);
     const [totalIncome, setTotalIncome] = useState(0);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -51,7 +49,7 @@ const CardInfo = () => {
     useEffect(() => {
         const fetchSalesSummary = async () => {
             try {
-                const response = await fetch('/api/sales/summary');
+                const response = await fetch('/api/sales');
                 if (!response.ok) {
                     throw new Error('Error al obtener el resumen de ventas');
                 }
@@ -59,13 +57,7 @@ const CardInfo = () => {
                 setTotalSalesCount(data.totalSalesCount);
                 setTotalIncome(data.totalIncome);
             } catch (error) {
-                if (error instanceof Error) {
-                    setError(error.message);
-                } else {
-                    setError('An unknown error occurred');
-                }
-            } finally {
-                setLoading(false);
+                console.error('Error fetching sales summary:', error);
             }
         };
 

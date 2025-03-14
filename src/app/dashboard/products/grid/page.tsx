@@ -1,14 +1,15 @@
 import ProductsHeader from "@/components/layout/products/productsHeader"
-import ProductsTable from "@/components/layout/products/productsTable"
+import ProductsGrid from "@/components/layout/products/productsGrid"
 import DashboardShell from "@/components/layout/dashboardShell";
 
-const ProductsPage = () => {
+const ProductsGridPage = () => {
     return (
         <DashboardShell>
             <ProductsHeader />
-            <ProductsTable />
+            <ProductsGrid />
         </DashboardShell>
     )
 }
 
-export default ProductsPage;
+export default ProductsGridPage;
+

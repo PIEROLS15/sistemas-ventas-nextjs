@@ -11,8 +11,34 @@ export async function GET() {
     }
 }
 
-export async function POST() {
-    return NextResponse.json({ error: 'Método no permitido' }, { status: 405 });
+export async function POST(request: Request) {
+    try {
+        const body = await request.json();
+        const { sku, name, price, stock } = body;
+
+        if (!sku || !name || price === undefined || stock === undefined) {
+            return NextResponse.json(
+                { error: 'Faltan campos requeridos' },
+                { status: 400 }
+            );
+        }
+
+        const newProduct = await prisma.product.create({
+            data: {
+                sku,
+                name,
+                price,
+                stock,
+            },
+        });
+
+        return NextResponse.json(newProduct, { status: 201 });
+    } catch (error) {
+        return NextResponse.json(
+            { error: 'Error al crear el producto', details: error },
+            { status: 500 }
+        );
+    }
 }
 
 export async function PUT() {
