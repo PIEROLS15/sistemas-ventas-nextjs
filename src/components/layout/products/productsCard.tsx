@@ -1,48 +1,34 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Pencil, Trash2, Eye } from "lucide-react"
-import ProductDialog from "@/components/layout/products/productsDialog"
-import DeleteProductDialog from "@/components/layout/products/deleteProductDialog"
-import DetailsProductDialog from "@/components/layout/products/detailProductDialog"
+import { useState } from "react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Pencil, Trash2, Eye } from "lucide-react";
+import ProductDialog from "@/components/layout/products/productsDialog";
+import DeleteProductDialog from "@/components/layout/products/deleteProductDialog";
+import DetailsProductDialog from "@/components/layout/products/detailProductDialog";
+import { getStockStatus, formatPrice } from '@/utils/productUtils';
+import { ProductCardProps } from '@/types/products';
 
-interface ProductCardProps {
-    product: {
-        id: number
-        sku: string
-        name: string
-        price: number
-        stock: number
-        createdAt: Date
-        updatedAt: Date
-    }
-}
+export function ProductCard({ product, fetchProducts }: ProductCardProps) {
+    const [showEditDialog, setShowEditDialog] = useState(false);
+    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showDetailsDialog, setShowDetailsDialog] = useState(false);
 
-// Función para determinar el estado del stock
-const getStockStatus = (stock: number) => {
-    if (stock <= 5) return { label: "Crítico", variant: "destructive" as const }
-    if (stock <= 15) return { label: "Bajo", variant: "outline" as const }
-    if (stock <= 30) return { label: "Medio", variant: "secondary" as const }
-    return { label: "Óptimo", variant: "default" as const }
-}
+    const stockStatus = getStockStatus(product.stock);
 
-// Función para formatear precio
-const formatPrice = (price: number) => {
-    return new Intl.NumberFormat("es-ES", {
-        style: "currency",
-        currency: "USD",
-    }).format(price)
-}
+    // Función para manejar la actualización de productos
+    const handleEditSuccess = () => {
+        setShowEditDialog(false);
+        fetchProducts();
+    };
 
-export function ProductCard({ product }: ProductCardProps) {
-    const [showEditDialog, setShowEditDialog] = useState(false)
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false)
-    const [showDetailsDialog, setShowDetailsDialog] = useState(false)
-
-    const stockStatus = getStockStatus(product.stock)
+    // Función para manejar la eliminación exitosa
+    const handleDelete = () => {
+        setShowDeleteDialog(false);
+        fetchProducts();
+    };
 
     return (
         <>
@@ -71,7 +57,12 @@ export function ProductCard({ product }: ProductCardProps) {
                             <Pencil className="h-4 w-4 mr-1" />
                             Editar
                         </Button>
-                        <Button variant="outline" size="sm" className="text-destructive" onClick={() => setShowDeleteDialog(true)}>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="text-destructive"
+                            onClick={() => setShowDeleteDialog(true)}
+                        >
                             <Trash2 className="h-4 w-4 mr-1" />
                             Eliminar
                         </Button>
@@ -79,16 +70,31 @@ export function ProductCard({ product }: ProductCardProps) {
                 </CardFooter>
             </Card>
 
-            {showEditDialog && <ProductDialog open={showEditDialog} onOpenChange={setShowEditDialog} product={product} />}
+            {showEditDialog && (
+                <ProductDialog
+                    open={showEditDialog}
+                    onOpenChange={setShowEditDialog}
+                    product={product}
+                    onSuccess={handleEditSuccess}
+                />
+            )}
 
             {showDeleteDialog && (
-                <DeleteProductDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog} product={product} />
+                <DeleteProductDialog
+                    open={showDeleteDialog}
+                    onOpenChange={setShowDeleteDialog}
+                    product={product}
+                    onDelete={handleDelete}
+                />
             )}
 
             {showDetailsDialog && (
-                <DetailsProductDialog open={showDetailsDialog} onOpenChange={setShowDetailsDialog} product={product} />
+                <DetailsProductDialog
+                    open={showDetailsDialog}
+                    onOpenChange={setShowDetailsDialog}
+                    product={product}
+                />
             )}
         </>
-    )
+    );
 }
-

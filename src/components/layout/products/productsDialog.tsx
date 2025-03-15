@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import * as z from "zod"
-import { Loader2 } from "lucide-react"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
     Dialog,
     DialogContent,
@@ -14,9 +14,11 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import useProducts from "@/hooks/useProducts";
+import { ProductDialogProps } from "@/types/products";
 
 // Esquema de validación para el formulario
 const productSchema = z.object({
@@ -32,27 +34,15 @@ const productSchema = z.object({
     stock: z.coerce.number().int().min(0, {
         message: "El stock no puede ser negativo",
     }),
-})
+});
 
-type ProductFormValues = z.infer<typeof productSchema>
+type ProductFormValues = z.infer<typeof productSchema>;
 
-interface ProductDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    product?: {
-        id: number
-        sku: string
-        name: string
-        price: number
-        stock: number
-    } | null
-}
+const ProductDialog = ({ open, onOpenChange, product, onSuccess }: ProductDialogProps) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const isEditing = !!product;
+    const { createProduct, updateProduct } = useProducts();
 
-const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
-    const [isLoading, setIsLoading] = useState(false)
-    const isEditing = !!product
-
-    // Inicializar el formulario con valores por defecto o los del producto a editar
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(productSchema),
         defaultValues: {
@@ -61,34 +51,39 @@ const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
             price: product?.price || 0,
             stock: product?.stock || 0,
         },
-    })
+    });
 
     async function onSubmit(data: ProductFormValues) {
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
-            // Simulación de envío de datos
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            const productData = {
+                ...data,
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+            };
 
-            // Aquí iría la lógica real para guardar/actualizar el producto
-            console.log("Datos del producto:", data)
+            if (isEditing && product) {
+                await updateProduct(product.id, data);
+            } else {
+                await createProduct(productData);
+            }
 
-            // Mostrar notificación de éxito
             toast.success(isEditing ? "Producto actualizado" : "Producto creado", {
                 description: isEditing
                     ? `El producto ${data.name} ha sido actualizado correctamente.`
                     : `El producto ${data.name} ha sido creado correctamente.`,
-            })
+            });
 
-            // Cerrar el diálogo
-            onOpenChange(false)
+            onOpenChange(false);
+            onSuccess();
         } catch (error) {
-            console.error("Error al guardar el producto:", error)
+            console.error("Error al guardar el producto:", error);
             toast.error("Error", {
                 description: "Ocurrió un error al guardar el producto. Intenta nuevamente.",
-            })
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
@@ -180,7 +175,7 @@ const ProductDialog = ({ open, onOpenChange, product }: ProductDialogProps) => {
                 </Form>
             </DialogContent>
         </Dialog>
-    )
-}
+    );
+};
 
 export default ProductDialog;

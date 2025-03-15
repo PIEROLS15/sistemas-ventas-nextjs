@@ -3,11 +3,18 @@ import prisma from '@/lib/prisma';
 
 export async function GET() {
     try {
-        const products = await prisma.product.findMany();
-        return NextResponse.json(products, { status: 200 });
+        const products = await prisma.product.findMany({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
 
+        return NextResponse.json(products, { status: 200 });
     } catch (error) {
-        return NextResponse.json({ error: 'Error al obtener los productos', details: error }, { status: 500 });
+        return NextResponse.json(
+            { error: 'Error al obtener los productos', details: error },
+            { status: 500 }
+        );
     }
 }
 

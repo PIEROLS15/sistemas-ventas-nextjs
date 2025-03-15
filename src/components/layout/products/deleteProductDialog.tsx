@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Loader2, AlertTriangle } from "lucide-react"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { Loader2, AlertTriangle } from "lucide-react";
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -12,44 +12,34 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
+import { DeleteProductDialogProps } from "@/types/products";
+import useProducts from "@/hooks/useProducts";
 
-interface DeleteProductDialogProps {
-    open: boolean
-    onOpenChange: (open: boolean) => void
-    product: {
-        id: number
-        name: string
-    }
-}
-
-const DeleteProductDialog = ({ open, onOpenChange, product }: DeleteProductDialogProps) => {
-    const [isLoading, setIsLoading] = useState(false)
+const DeleteProductDialog = ({ open, onOpenChange, product, onDelete }: DeleteProductDialogProps) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const { deleteProduct } = useProducts();
 
     async function handleDelete() {
-        setIsLoading(true)
+        setIsLoading(true);
 
         try {
-            // Simulación de eliminación
-            await new Promise((resolve) => setTimeout(resolve, 1000))
+            await deleteProduct(product.id);
 
-            // Aquí iría la lógica real para eliminar el producto
-            console.log("Eliminando producto:", product.id)
-
-            // Mostrar notificación de éxito
             toast.success("Producto eliminado", {
                 description: `El producto ${product.name} ha sido eliminado correctamente.`,
-            })
+            });
 
-            // Cerrar el diálogo
-            onOpenChange(false)
+            onDelete(product.id);
+            onOpenChange(false);
+
         } catch (error) {
-            console.error("Error al eliminar el producto:", error)
+            console.error("Error al eliminar el producto:", error);
             toast.error("Error", {
                 description: "Ocurrió un error al eliminar el producto. Intenta nuevamente.",
-            })
+            });
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
 
@@ -81,7 +71,7 @@ const DeleteProductDialog = ({ open, onOpenChange, product }: DeleteProductDialo
                 </AlertDialogFooter>
             </AlertDialogContent>
         </AlertDialog>
-    )
-}
+    );
+};
 
 export default DeleteProductDialog;

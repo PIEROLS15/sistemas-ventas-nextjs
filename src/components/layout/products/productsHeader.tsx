@@ -6,9 +6,15 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import ProductDialog from "@/components/layout/products/productsDialog"
 import { ProductsTabs } from "@/components/layout/products/productsTab"
+import { ProductsHeaderProps } from "@/types/products";
 
-const ProductsHeader = () => {
+const ProductsHeader = ({ fetchProducts }: ProductsHeaderProps) => {
     const [open, setOpen] = useState(false)
+
+    // Función que se ejecutará después de crear o editar un producto
+    const handleSuccess = () => {
+        fetchProducts();
+    }
 
     return (
         <div className="space-y-4">
@@ -30,9 +36,9 @@ const ProductsHeader = () => {
 
             <ProductsTabs />
 
-            <ProductDialog open={open} onOpenChange={setOpen} />
+            <ProductDialog open={open} onOpenChange={setOpen} onSuccess={handleSuccess} />
         </div>
     )
 }
 
-export default ProductsHeader;
+export default ProductsHeader
