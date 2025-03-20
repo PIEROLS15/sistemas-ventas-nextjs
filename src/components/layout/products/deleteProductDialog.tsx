@@ -24,20 +24,22 @@ const DeleteProductDialog = ({ open, onOpenChange, product, onDelete }: DeletePr
         setIsLoading(true);
 
         try {
-            await deleteProduct(product.id);
+            const result = await deleteProduct(product.id);
 
-            toast.success("Producto eliminado", {
-                description: `El producto ${product.name} ha sido eliminado correctamente.`,
-            });
-
+            if (result.success) {
+                toast.success("Producto eliminado", { description: result.message });
+            } else {
+                toast.error("Error", { description: result.message });
+            }
             onDelete(product.id);
             onOpenChange(false);
 
         } catch (error) {
-            console.error("Error al eliminar el producto:", error);
+            void error
             toast.error("Error", {
                 description: "Ocurrió un error al eliminar el producto. Intenta nuevamente.",
             });
+
         } finally {
             setIsLoading(false);
         }

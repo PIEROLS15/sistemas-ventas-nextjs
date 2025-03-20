@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { toast } from "sonner";
 import { Product } from "@/types/products";
 
 const useProducts = () => {
@@ -44,14 +43,11 @@ const useProducts = () => {
 
             const newProduct = await response.json();
             setProducts((prevProducts) => [...prevProducts, newProduct]);
-            toast.success("Producto creado", {
-                description: `El producto ${newProduct.name} ha sido creado correctamente.`,
-            });
+            return { success: true, message: `El producto ${newProduct.name} ha sido creado correctamente.` }
+
         } catch (error) {
-            console.error("Error al crear el producto:", error);
-            toast.error("Error", {
-                description: "Ocurrió un error al crear el producto. Intenta nuevamente.",
-            });
+            void error;
+            return { success: false, message: "Ocurrió un error al crear el producto. Intenta nuevamente." };
         }
     };
 
@@ -76,20 +72,20 @@ const useProducts = () => {
                     product.id === productId ? { ...product, ...updatedProduct } : product
                 )
             );
-            toast.success("Producto actualizado", {
-                description: `El producto ${updatedProduct.name} ha sido actualizado correctamente.`,
-            });
+            return { success: true, message: `El producto ${updatedProduct.name} ha sido actualizado correctamente.` }
         } catch (error) {
-            console.error("Error al actualizar el producto:", error);
-            toast.error("Error", {
-                description: "Ocurrió un error al actualizar el producto. Intenta nuevamente.",
-            });
+
+            void error
+            return { success: false, message: "Ocurrió un error al actualizar el producto. Intenta nuevamente." };
         }
     };
 
     // Función para eliminar un producto
-    const deleteProduct = async (productId: number) => {
+    const deleteProduct = async (productId: number): Promise<{ success: boolean; message: string }> => {
         try {
+            const product = products.find((p) => p.id === productId);
+            const productName = product ? product.name : "Desconocido";
+
             const response = await fetch(`/api/products/${productId}`, {
                 method: "DELETE",
             });
@@ -102,16 +98,14 @@ const useProducts = () => {
                 prevProducts.filter((product) => product.id !== productId)
             );
 
-            toast.success("Producto eliminado", {
-                description: "El producto ha sido eliminado correctamente.",
-            });
+            return { success: true, message: `El producto ${productName} ha sido eliminado correctamente.` };
         } catch (error) {
-            console.error("Error al eliminar el producto:", error);
-            toast.error("Error", {
-                description: "Ocurrió un error al eliminar el producto. Intenta nuevamente.",
-            });
+
+            void error;
+            return { success: false, message: "Ocurrió un error al eliminar el producto. Intenta nuevamente." };
         }
     };
+
 
     useEffect(() => {
         fetchProducts();

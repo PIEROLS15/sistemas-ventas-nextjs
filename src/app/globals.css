@@ -2,19 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilo general para el Toast */
-/* .toast-custom {
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  max-width: 400px;
-  width: 100%;
-} */
-.toast-custom {
-  @apply font-semibold  bg-white dark:text-white/80 dark:bg-gray-800 
-    text-sm p-4 rounded-lg max-w-[400px] w-full shadow-lg;
-}
-
 
 @layer base {
   :root {

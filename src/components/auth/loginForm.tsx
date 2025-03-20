@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 
 const LoginForm = () => {
     const [isLoading, setIsLoading] = useState(false);
@@ -61,8 +61,6 @@ const LoginForm = () => {
                     "Iniciar sesión"
                 )}
             </Button>
-
-            <ToastContainer position="top-right" autoClose={1000} toastClassName="toast-custom" />
         </form>
     );
 };
