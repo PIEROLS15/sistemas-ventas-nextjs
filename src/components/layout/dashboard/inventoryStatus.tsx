@@ -11,10 +11,7 @@ interface InventoryStatusProps {
 }
 
 const InventoryStatus: React.FC<InventoryStatusProps> = ({ className }) => {
-    const { products, loading, error } = useProducts();
-
-    if (loading) return <p>Cargando productos...</p>;
-    if (error) return <p>Error: {error}</p>;
+    const { products } = useProducts();
 
     // Filtrar productos con stock Crítico y Bajo
     const filteredProducts = products.filter((product) => {

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 
 const RegisterForm = () => {
@@ -65,7 +65,6 @@ const RegisterForm = () => {
 
             toast.success("Registro exitoso");
 
-            // Redirigir al usuario a /dashboard
             router.push("/dashboard");
 
         } catch (error: unknown) {
@@ -102,7 +101,6 @@ const RegisterForm = () => {
                     "Crear cuenta"
                 )}
             </Button>
-            <ToastContainer position="top-right" autoClose={1000} toastClassName="toast-custom" />
         </form>
     );
 };

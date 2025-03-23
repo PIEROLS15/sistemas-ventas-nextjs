@@ -6,7 +6,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // Insertar roles
-    const roles: $Enums.RoleType[] = [$Enums.RoleType.ADMIN, $Enums.RoleType.SELLER];
+    const roles: $Enums.RoleType[] = [$Enums.RoleType.Admin, $Enums.RoleType.Seller];
 
     for (const role of roles) {
         await prisma.role.upsert({

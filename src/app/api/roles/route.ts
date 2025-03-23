@@ -3,22 +3,13 @@ import prisma from '@/lib/prisma';
 
 export async function GET() {
     try {
-        const users = await prisma.user.findMany({
-            include: {
-                role: true
-            }
-        });
+        const roles = await prisma.role.findMany();
 
-        const usersWithRoles = users.map(user => ({
-            ...user,
-            roleName: user.role ? user.role.name : null
-        }));
-
-        return NextResponse.json(usersWithRoles, { status: 200 });
+        return NextResponse.json(roles, { status: 200 });
 
     } catch (error) {
         return NextResponse.json(
-            { error: 'Error al obtener los usuarios', details: (error as Error).message },
+            { error: 'Error al obtener los roles', details: (error as Error).message },
             { status: 500 }
         );
     }

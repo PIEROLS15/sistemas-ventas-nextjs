@@ -42,6 +42,39 @@ export async function POST() {
     return NextResponse.json({ error: 'Método no permitido' }, { status: 405 });
 }
 
+export async function PUT(
+    request: NextRequest,
+    context: { params: Promise<{ id: string }> }
+) {
+    const { id } = await context.params;
+    const { roleId } = await request.json();
+
+    if (!roleId) {
+        return NextResponse.json(
+            { error: "El campo roleId es requerido." },
+            { status: 400 }
+        );
+    }
+
+    try {
+        const updatedUser = await prisma.user.update({
+            where: { id: parseInt(id, 10) },
+            data: { roleId: parseInt(roleId, 10) },
+            include: { role: true },
+        });
+
+        return NextResponse.json(
+            { message: "Rol actualizado correctamente", user: updatedUser },
+            { status: 200 }
+        );
+    } catch (error) {
+        return NextResponse.json(
+            { error: "Error al actualizar el rol del usuario", details: error },
+            { status: 500 }
+        );
+    }
+}
+
 export async function PATCH(
     request: NextRequest,
     context: { params: Promise<{ id: string }> }
