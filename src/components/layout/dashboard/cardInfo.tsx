@@ -49,7 +49,7 @@ const CardInfo = () => {
     useEffect(() => {
         const fetchSalesSummary = async () => {
             try {
-                const response = await fetch('/api/sales');
+                const response = await fetch('/api/totalSales');
                 if (!response.ok) {
                     throw new Error('Error al obtener el resumen de ventas');
                 }
