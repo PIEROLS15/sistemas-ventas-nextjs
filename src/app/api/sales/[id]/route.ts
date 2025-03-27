@@ -20,8 +20,18 @@ export async function GET(
             where: { id: saleId },
             select: {
                 saleCode: true,
-                saleDate: true,
                 customerName: true,
+                identification: {
+                    select: {
+                        type: true,
+                    },
+                },
+                identificationNumber: true,
+                email: true,
+                totalAmount: true,
+                createdAt: true,
+                updatedAt: true,
+                status: true,
                 seller: {
                     select: {
                         firstName: true,

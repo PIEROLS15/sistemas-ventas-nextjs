@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server';
 import prisma from '@/lib/prisma';
-import { v4 as uuidv4 } from 'uuid';
+import { nanoid } from 'nanoid';
 
 export async function GET() {
     try {
@@ -23,7 +23,8 @@ export async function GET() {
                         lastName: true,
                     },
                 },
-                saleDate: true,
+                status: true,
+                createdAt: true,
             },
         });
 
@@ -33,6 +34,7 @@ export async function GET() {
         return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
     }
 }
+
 export async function POST(req: NextRequest) {
     try {
         const { cliente_nombre, identificacion_id, numero_identificacion, cliente_correo, sellerId, products } = await req.json();
@@ -65,16 +67,17 @@ export async function POST(req: NextRequest) {
             }
         }
 
+        const saleCode = `SV-${nanoid(10)}`;
+
         const sale = await prisma.sale.create({
             data: {
-                saleCode: uuidv4(),
+                saleCode: saleCode,
                 customerName: cliente_nombre,
                 identification: { connect: { id: identificacion_id } },
                 identificationNumber: numero_identificacion,
                 email: cliente_correo,
                 totalAmount,
-                saleDate: new Date(),
-                saleTime: new Date().toISOString().split("T")[1],
+                createdAt: new Date(),
                 seller: { connect: { id: sellerId } },
                 SaleDetail: { create: saleDetails },
             },
