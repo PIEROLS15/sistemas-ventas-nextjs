@@ -69,6 +69,43 @@ export async function GET(
     }
 }
 
+export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await context.params;
+        const saleId = parseInt(id, 10);
+
+        if (isNaN(saleId)) {
+            return NextResponse.json(
+                { error: "ID de venta no válido" },
+                { status: 400 }
+            );
+        }
+
+        const { status } = await request.json();
+
+        if (!["Pending", "Completed", "Canceled"].includes(status)) {
+            return NextResponse.json(
+                { error: "Estado de venta no válido" },
+                { status: 400 }
+            );
+        }
+
+        const updatedSale = await prisma.sale.update({
+            where: { id: saleId },
+            data: { status },
+        });
+
+        return NextResponse.json(updatedSale, { status: 200 });
+
+    } catch (error) {
+        return NextResponse.json(
+            { error: "Error al actualizar el estado de la venta", details: error },
+            { status: 500 }
+        );
+    }
+}
+
+
 export async function POST() {
     return NextResponse.json(
         { error: 'Método no permitido' },
