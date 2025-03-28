@@ -6,7 +6,7 @@ import { ShoppingCart, Menu } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import ThemeToggle from "@/components/ui/themeToggle"
-import DropdownProfile from "./dropdownProfile"
+import DropdownProfile from "./dashboard/dropdownProfile"
 
 
 const HeaderDashboard = () => {

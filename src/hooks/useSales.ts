@@ -5,6 +5,8 @@ import { useSession } from "next-auth/react"
 
 const useSales = () => {
     const [sales, setSales] = useState<Sale[]>([]);
+    const [totalSalesCount, setTotalSalesCount] = useState(0);
+    const [totalIncome, setTotalIncome] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const { data: session } = useSession();
@@ -25,6 +27,7 @@ const useSales = () => {
         }
     };
 
+    // Crear ventas
     const createSale = async (data: SaleData) => {
         setLoading(true);
 
@@ -105,11 +108,29 @@ const useSales = () => {
         }
     };
 
+    const fetchSalesSummary = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch('/api/totalSales');
+            if (!response.ok) {
+                throw new Error('Error al obtener el resumen de ventas');
+            }
+            const data = await response.json();
+            setTotalSalesCount(data.totalSalesCount);
+            setTotalIncome(data.totalIncome);
+        } catch (error) {
+            setError(error instanceof Error ? error.message : "Ocurrió un error desconocido");
+        } finally {
+            setLoading(false);
+        }
+    }
+
     useEffect(() => {
         fetchSales();
+        fetchSalesSummary();
     }, []);
 
-    return { sales, loading, error, fetchSales, updateSaleStatus, createSale };
+    return { sales, loading, error, fetchSales, updateSaleStatus, createSale, fetchSalesSummary, totalSalesCount, totalIncome };
 };
 
 export default useSales;

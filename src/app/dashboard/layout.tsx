@@ -1,4 +1,4 @@
-import HeaderDashboard from "@/components/layout/dashboard/header";
+import HeaderDashboard from "@/components/layout/header";
 import Sidebar from "@/components/layout/dashboard/sidebar";
 import { ReactNode } from 'react';
 import { Toaster } from "sonner"

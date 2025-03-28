@@ -1,110 +1,83 @@
-"use client"
+"use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import useSales from "@/hooks/useSales";
+import { formatPrice, getStatusBadge } from "@/utils/productUtils";
 
-interface RecentSalesProps {
-    className?: string;
-}
+// Función para calcular tiempo relativo
+const getRelativeTime = (date: Date) => {
+    const now = new Date();
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
 
-const RecentSales: React.FC<RecentSalesProps> = ({ className }) => {
-    // Datos de ejemplo
-    const sales = [
-        {
-            customer: {
-                name: "Olivia Martínez",
-                email: "olivia@example.com",
-                avatar: "/placeholder-user.jpg",
-                initials: "OM",
-            },
-            amount: "$429.00",
-            status: "Completada",
-            date: "Hace 2 horas",
-        },
-        {
-            customer: {
-                name: "Carlos Rodríguez",
-                email: "carlos@example.com",
-                avatar: "/placeholder-user.jpg",
-                initials: "CR",
-            },
-            amount: "$829.00",
-            status: "Completada",
-            date: "Hace 5 horas",
-        },
-        {
-            customer: {
-                name: "Sofía García",
-                email: "sofia@example.com",
-                avatar: "/placeholder-user.jpg",
-                initials: "SG",
-            },
-            amount: "$129.00",
-            status: "Pendiente",
-            date: "Hace 8 horas",
-        },
-        {
-            customer: {
-                name: "Javier López",
-                email: "javier@example.com",
-                avatar: "/placeholder-user.jpg",
-                initials: "JL",
-            },
-            amount: "$549.00",
-            status: "Completada",
-            date: "Hace 12 horas",
-        },
-        {
-            customer: {
-                name: "Ana Torres",
-                email: "ana@example.com",
-                avatar: "/placeholder-user.jpg",
-                initials: "AT",
-            },
-            amount: "$949.00",
-            status: "Cancelada",
-            date: "Hace 1 día",
-        },
-    ]
+    if (diffInSeconds < 60) return "justo ahora";
+    if (diffInSeconds < 3600) return `hace ${Math.floor(diffInSeconds / 60)} min`;
+    if (diffInSeconds < 86400) return `hace ${Math.floor(diffInSeconds / 3600)} h`;
+
+    return date.toLocaleString("es-ES", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    });
+};
+
+const RecentSales: React.FC<{ className?: string }> = ({ className }) => {
+    const { sales, loading, error } = useSales();
+
+    if (loading) {
+        return <div>Cargando ventas...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    // Filtrar y ordenar las 5 ventas más recientes
+    const recentSales = [...sales]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 5);
 
     return (
         <Card className={`h-full ${className}`}>
             <CardHeader>
                 <CardTitle>Ventas Recientes</CardTitle>
-                <CardDescription>Has realizado 265 ventas este mes</CardDescription>
+                <CardDescription>Has realizado {sales.length} ventas</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="space-y-6">
-                    {sales.map((sale, index) => (
-                        <div key={index} className="flex items-center justify-between">
+                    {recentSales.map((sale) => (
+                        <div key={sale.id} className="flex items-center justify-between">
                             <div className="flex items-center space-x-4">
                                 <Avatar>
-                                    <AvatarImage src={sale.customer.avatar} />
-                                    <AvatarFallback>{sale.customer.initials}</AvatarFallback>
+                                    <AvatarFallback>
+                                        {sale.customerName
+                                            .split(" ")
+                                            .map((n) => n[0])
+                                            .join("")}
+                                    </AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <p className="text-sm font-medium leading-none">{sale.customer.name}</p>
-                                    <p className="text-sm text-muted-foreground">{sale.customer.email}</p>
+                                    <p className="text-sm font-medium leading-none">{sale.customerName}</p>
+                                    <p className="text-sm text-muted-foreground">{sale.email}</p>
                                 </div>
                             </div>
                             <div className="flex items-center space-x-4">
-                                <Badge
-                                    variant={
-                                        sale.status === "Completada" ? "default" : sale.status === "Pendiente" ? "outline" : "destructive"
-                                    }
-                                >
-                                    {sale.status}
-                                </Badge>
-                                <p className="font-medium">{sale.amount}</p>
-                                <p className="text-xs text-muted-foreground">{sale.date}</p>
+                                {(() => {
+                                    const { label, variant } = getStatusBadge(sale.status);
+                                    return <Badge variant={variant}>{label}</Badge>;
+                                })()}
+                                <p className="font-medium">{formatPrice(sale.totalAmount)}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {getRelativeTime(new Date(sale.createdAt))}
+                                </p>
                             </div>
                         </div>
                     ))}
                 </div>
             </CardContent>
         </Card>
-    )
-}
+    );
+};
 
 export default RecentSales;
