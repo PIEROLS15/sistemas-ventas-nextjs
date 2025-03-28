@@ -6,8 +6,8 @@ export async function GET() {
     try {
         const sales = await prisma.sale.findMany({
             select: {
-                saleCode: true,
                 id: true,
+                saleCode: true,
                 customerName: true,
                 identification: {
                     select: {
@@ -17,15 +17,28 @@ export async function GET() {
                 identificationNumber: true,
                 email: true,
                 totalAmount: true,
+                createdAt: true,
+                updatedAt: true,
+                status: true,
                 seller: {
                     select: {
                         firstName: true,
                         lastName: true,
-                    },
+                    }
                 },
-                status: true,
-                createdAt: true,
-            },
+                SaleDetail: {
+                    select: {
+                        product: {
+                            select: {
+                                name: true,
+                            }
+                        },
+                        quantity: true,
+                        unitPrice: true,
+                        subtotal: true
+                    }
+                }
+            }
         });
 
         return new Response(JSON.stringify(sales), { status: 200 });

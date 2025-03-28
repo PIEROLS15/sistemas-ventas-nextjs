@@ -31,3 +31,16 @@ export const formatDateOnly = (date: string) => {
         day: "numeric",
     }).format(new Date(date));
 };
+
+export const getStatusBadge = (status: string) => {
+    switch (status) {
+        case "Completed":
+            return { label: "Completada", variant: "default" as const }
+        case "Pending":
+            return { label: "Pendiente", variant: "outline" as const }
+        case "Canceled":
+            return { label: "Cancelada", variant: "destructive" as const }
+        default:
+            return { label: status, variant: "secondary" as const }
+    }
+}
