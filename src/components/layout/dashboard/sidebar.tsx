@@ -8,8 +8,7 @@ import {
     ShoppingCart,
     Users,
     Package,
-    BarChart,
-    Settings
+    BarChart
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -45,12 +44,7 @@ const navItems: NavItem[] = [
         title: "Reportes",
         href: "/dashboard/sales-report",
         icon: BarChart,
-    },
-    {
-        title: "Configuración",
-        href: "/dashboard/configuracion",
-        icon: Settings,
-    },
+    }
 ]
 
 const Sidebar = () => {

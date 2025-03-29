@@ -32,6 +32,28 @@ export interface Identification {
     type: string
 }
 
+export interface SaleReport {
+    id: number
+    saleCode: string
+    customerName: string
+    email: string
+    identificationNumber: string
+    identification: {
+        type: string
+    }
+    totalAmount: string
+    totalProducts: number
+    status: string
+    createdAt: string
+}
+
+export interface SalesReportResultsCardProps {
+    filteredSales: SaleReport[]
+    isExporting: "excel" | "pdf" | "csv" | null
+    setIsExporting: (type: "excel" | "pdf" | "csv" | null) => void
+}
+
+
 export interface SaleData {
     customerName: string;
     identificationType: string;

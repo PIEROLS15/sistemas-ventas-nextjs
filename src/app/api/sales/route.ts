@@ -41,10 +41,10 @@ export async function GET() {
             }
         });
 
-        return new Response(JSON.stringify(sales), { status: 200 });
+        return new NextResponse(JSON.stringify(sales), { status: 200 });
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-        return new Response(JSON.stringify({ error: errorMessage }), { status: 500 });
+        return new NextResponse(JSON.stringify({ error: errorMessage }), { status: 500 });
     }
 }
 
