@@ -14,27 +14,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination"
 import UserUpdateDialog from "@/components/layout/users/userUpdateDialog"
 import UserStatusDialog from "@/components/layout/users/userStatusDialog"
 import UserDetailsDialog from "@/components/layout/users/userDetailDialog"
 import { User, UsersTableProps } from '@/types/users'
 import { formatDateOnly } from '@/utils/productUtils'
-
+import PaginationComponent from "@/components/layout/pagination";
 
 const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
     const [editUser, setEditUser] = useState<User | null>(null)
     const [statusUser, setStatusUser] = useState<User | null>(null)
     const [viewUser, setViewUser] = useState<User | null>(null)
     const [currentPage, setCurrentPage] = useState(1);
-    const productsPerPage = 10;
+    const usersPerPage = 10;
 
     // Función para manejar la actualización de la lista después de editar un usuario
     const handleSuccess = () => {
@@ -42,30 +34,13 @@ const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
     };
 
     // Calcular los usuarios de la página actual
-    const indexOfLastUser = currentPage * productsPerPage;
-    const indexOfFirstUser = indexOfLastUser - productsPerPage;
+    const indexOfLastUser = currentPage * usersPerPage;
+    const indexOfFirstUser = indexOfLastUser - usersPerPage;
     const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-
-    // Calcular el número total de páginas
-    const totalPages = Math.ceil(users.length / productsPerPage);
 
     // Función para cambiar de página
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-    };
-
-    // Función para ir a la página anterior
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    // Función para ir a la página siguiente
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
     };
 
     if (loading) {
@@ -160,28 +135,11 @@ const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
                     <p className="text-sm text-muted-foreground">
                         Mostrando {indexOfFirstUser + 1}-{Math.min(indexOfLastUser, users.length)} de {users.length} productos
                     </p>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious href="#" onClick={handlePreviousPage} />
-                            </PaginationItem>
-
-                            {Array.from({ length: totalPages }, (_, index) => (
-                                <PaginationItem key={index + 1}>
-                                    <PaginationLink
-                                        href="#"
-                                        isActive={currentPage === index + 1}
-                                        onClick={() => handlePageChange(index + 1)}
-                                    >
-                                        {index + 1}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext href="#" onClick={handleNextPage} />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <PaginationComponent
+                        totalItems={users.length}
+                        itemsPerPage={usersPerPage}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </CardFooter>
 

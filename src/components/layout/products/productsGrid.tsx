@@ -1,47 +1,22 @@
-"use client";
-
+// components/layout/products/ProductsGrid.tsx
 import { useState } from "react";
 import { ProductCard } from "@/components/layout/products/productsCard";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { ProductsGridProps } from '@/types/products';
+import PaginationComponent from "@/components/layout/pagination";
 
 const ProductsGrid = ({ products, loading, error, fetchProducts }: ProductsGridProps) => {
-    const [currentPage, setCurrentPage] = useState(1);
     const productsPerPage = 10;
 
-    // Calcular los productos de la página actual
+    // Función para calcular los productos de la página actual
+    const [currentPage, setCurrentPage] = useState(1);
     const indexOfLastProduct = currentPage * productsPerPage;
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
-    // Calcular el número total de páginas
-    const totalPages = Math.ceil(products.length / productsPerPage);
-
-    // Función para cambiar de página
+    // Función para cambiar la página
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-    };
-
-    // Función para ir a la página anterior
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    // Función para ir a la página siguiente
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
     };
 
     if (loading) {
@@ -78,33 +53,11 @@ const ProductsGrid = ({ products, loading, error, fetchProducts }: ProductsGridP
                     <p className="text-sm text-muted-foreground">
                         Mostrando {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, products.length)} de {products.length} productos
                     </p>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href="#"
-                                    onClick={handlePreviousPage}
-                                />
-                            </PaginationItem>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                                <PaginationItem key={index + 1}>
-                                    <PaginationLink
-                                        href="#"
-                                        isActive={currentPage === index + 1}
-                                        onClick={() => handlePageChange(index + 1)}
-                                    >
-                                        {index + 1}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext
-                                    href="#"
-                                    onClick={handleNextPage}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <PaginationComponent
+                        totalItems={products.length}
+                        itemsPerPage={productsPerPage}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </CardFooter>
         </Card>

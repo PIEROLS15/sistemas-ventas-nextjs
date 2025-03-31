@@ -14,19 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from "@/components/ui/pagination";
 import ProductDialog from "@/components/layout/products/productsDialog";
 import DeleteProductDialog from "@/components/layout/products/deleteProductDialog";
 import DetailsProductDialog from "@/components/layout/products/detailProductDialog";
 import { Product, ProductsTableProps } from '@/types/products'
 import { getStockStatus, formatPrice, formatDateOnly } from '@/utils/productUtils'
+import PaginationComponent from "@/components/layout/pagination";
 
 const ProductsTable = ({ products, loading, error, fetchProducts }: ProductsTableProps) => {
     const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -45,26 +38,9 @@ const ProductsTable = ({ products, loading, error, fetchProducts }: ProductsTabl
     const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
     const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
-    // Calcular el número total de páginas
-    const totalPages = Math.ceil(products.length / productsPerPage);
-
     // Función para cambiar de página
     const handlePageChange = (page: number) => {
         setCurrentPage(page);
-    };
-
-    // Función para ir a la página anterior
-    const handlePreviousPage = () => {
-        if (currentPage > 1) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
-
-    // Función para ir a la página siguiente
-    const handleNextPage = () => {
-        if (currentPage < totalPages) {
-            setCurrentPage(currentPage + 1);
-        }
     };
 
     // Función para actualizar el estado de la tabla cuando se elimine un producto
@@ -160,33 +136,11 @@ const ProductsTable = ({ products, loading, error, fetchProducts }: ProductsTabl
                     <p className="text-sm text-muted-foreground">
                         Mostrando {indexOfFirstProduct + 1}-{Math.min(indexOfLastProduct, products.length)} de {products.length} productos
                     </p>
-                    <Pagination>
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    href="#"
-                                    onClick={handlePreviousPage}
-                                />
-                            </PaginationItem>
-                            {Array.from({ length: totalPages }, (_, index) => (
-                                <PaginationItem key={index + 1}>
-                                    <PaginationLink
-                                        href="#"
-                                        isActive={currentPage === index + 1}
-                                        onClick={() => handlePageChange(index + 1)}
-                                    >
-                                        {index + 1}
-                                    </PaginationLink>
-                                </PaginationItem>
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext
-                                    href="#"
-                                    onClick={handleNextPage}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <PaginationComponent
+                        totalItems={products.length}
+                        itemsPerPage={productsPerPage}
+                        onPageChange={handlePageChange}
+                    />
                 </div>
             </CardFooter>
 
