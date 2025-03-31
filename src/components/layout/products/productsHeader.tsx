@@ -5,7 +5,6 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import ProductDialog from "@/components/layout/products/productsDialog"
-import { ProductsTabs } from "@/components/layout/products/productsTab"
 import { ProductsHeaderProps } from "@/types/products";
 
 const ProductsHeader = ({ fetchProducts }: ProductsHeaderProps) => {
@@ -34,7 +33,7 @@ const ProductsHeader = ({ fetchProducts }: ProductsHeaderProps) => {
                 </div>
             </div>
 
-            <ProductsTabs />
+            {/* <ProductsTabs /> */}
 
             <ProductDialog open={open} onOpenChange={setOpen} onSuccess={handleSuccess} />
         </div>

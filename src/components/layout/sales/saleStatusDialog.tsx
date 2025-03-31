@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import { Loader2, CheckCircle, XCircle } from "lucide-react"
-// import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import {
     AlertDialog,
@@ -23,14 +22,12 @@ const SaleStatusDialog = ({ open, onOpenChange, sale, onSuccess }: SaleStatusDia
 
     // Determinar el mensaje según el estado actual y el nuevo estado
     const getStatusChangeMessage = () => {
-        if (sale.status === "Pending") {
+        if (sale.status === "Completed") {
             return isCompleting
                 ? `¿Estás seguro de que deseas marcar la venta ${sale.saleCode} como completada?`
                 : `¿Estás seguro de que deseas cancelar la venta ${sale.saleCode}? Esta acción no se puede deshacer.`
-        } else if (sale.status === "Completed") {
-            return `¿Estás seguro de que deseas cancelar la venta ${sale.saleCode} que ya estaba completada? Esta acción no se puede deshacer.`
-        } else {
-            return `¿Estás seguro de que deseas reactivar y marcar como completada la venta ${sale.saleCode} que estaba cancelada?`
+        } else if (sale.status === "Canceled") {
+            return `¿Estás seguro de que deseas cancelar la venta ${sale.saleCode}?`
         }
     }
 

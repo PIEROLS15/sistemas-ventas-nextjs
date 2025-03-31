@@ -27,10 +27,9 @@ import SaleStatusDialog from "@/components/layout/sales/saleStatusDialog"
 import { formatPrice, formatDateOnly, getStatusBadge } from '@/utils/productUtils'
 import { Sale, SalesTableProps } from '@/types/sales'
 
-
 const SalesTable = ({ sales, loading, error, fetchSales }: SalesTableProps) => {
     const [viewSale, setViewSale] = useState<Sale | null>(null)
-    const [statusSale, setStatusSale] = useState<(typeof sales)[0] | null>(null)
+    const [statusSale, setStatusSale] = useState<Sale | null>(null)
     const [currentPage, setCurrentPage] = useState(1);
     const salesPerPage = 10;
 

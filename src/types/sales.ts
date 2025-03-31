@@ -73,6 +73,18 @@ export interface SalesTableProps {
     fetchSales: () => void;
 }
 
+export interface SaleCardProps {
+    sales: Sale;
+    fetchSales: () => void;
+}
+
+export interface SalesGridProps {
+    sales: Sale[];
+    loading: boolean;
+    error: string | null;
+    fetchSales: () => void;
+}
+
 export interface SaleDetailsDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void

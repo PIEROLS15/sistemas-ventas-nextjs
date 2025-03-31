@@ -10,7 +10,7 @@ import DropdownProfile from "./dashboard/dropdownProfile";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { navItems } from '@/utils/navItems'
+import { navItemsMobile } from '@/utils/navItems'
 
 const HeaderDashboard = () => {
     const pathname = usePathname();
@@ -36,7 +36,7 @@ const HeaderDashboard = () => {
                                 </Link>
                             </div>
                             <nav className="flex flex-col gap-4 px-2 pt-16">
-                                {navItems.map((item, index) => (
+                                {navItemsMobile.map((item, index) => (
                                     <Link
                                         key={index}
                                         href={item.href}
