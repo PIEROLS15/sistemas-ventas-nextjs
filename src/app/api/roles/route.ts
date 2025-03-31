@@ -12,6 +12,8 @@ export async function GET() {
             { error: 'Error al obtener los roles', details: (error as Error).message },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 

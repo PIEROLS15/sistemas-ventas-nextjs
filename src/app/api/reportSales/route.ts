@@ -54,5 +54,7 @@ export async function POST(req: NextRequest) {
     } catch (error: unknown) {
         const errorMessage = error instanceof Error ? error.message : 'Unknown error';
         return new NextResponse(JSON.stringify({ error: errorMessage }), { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 }

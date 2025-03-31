@@ -35,6 +35,8 @@ export async function GET(
             { error: 'Error al obtener el usuario', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -72,6 +74,8 @@ export async function PUT(
             { error: "Error al actualizar el rol del usuario", details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -107,6 +111,8 @@ export async function PATCH(
             { error: 'Error al actualizar el estado del usuario', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 

@@ -50,5 +50,7 @@ export async function POST(req: Request) {
     } catch (error) {
         console.error(error);
         return NextResponse.json({ message: "Error interno del servidor" }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
     }
 }

@@ -66,6 +66,8 @@ export async function GET(
             { error: "Error al obtener la venta", details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -102,6 +104,8 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
             { error: "Error al actualizar el estado de la venta", details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 

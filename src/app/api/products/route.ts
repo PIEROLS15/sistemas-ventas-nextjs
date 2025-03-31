@@ -15,6 +15,8 @@ export async function GET() {
             { error: 'Error al obtener los productos', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 

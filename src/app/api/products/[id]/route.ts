@@ -25,6 +25,8 @@ export async function GET(
             { error: 'Error al obtener el producto', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -66,6 +68,8 @@ export async function PUT(
             { error: 'Error al actualizar el producto', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
 
@@ -91,5 +95,7 @@ export async function DELETE(
             { error: 'Error al eliminar el producto', details: error },
             { status: 500 }
         );
+    } finally {
+        await prisma.$disconnect();
     }
 }
