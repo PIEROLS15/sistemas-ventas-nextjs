@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { UserUpdateDialogProps } from "@/types/users";
 import { useRoles } from "@/hooks/useRoles";
+import { getRoleuser } from "@/utils/productUtils";
 
 const UserUpdateDialog = ({ open, onOpenChange, user, onSuccess }: UserUpdateDialogProps) => {
     const { roles, selectedRole, setSelectedRole, isLoading, updateUserRole } = useRoles(
@@ -51,11 +52,14 @@ const UserUpdateDialog = ({ open, onOpenChange, user, onSuccess }: UserUpdateDia
                                 <SelectValue placeholder={roles.length === 0 ? "Cargando roles..." : "Selecciona un rol"} />
                             </SelectTrigger>
                             <SelectContent>
-                                {roles.map((role) => (
-                                    <SelectItem key={role.id} value={role.id}>
-                                        {role.name}
-                                    </SelectItem>
-                                ))}
+                                {roles.map((role) => {
+                                    const { label } = getRoleuser(role.name);
+                                    return (
+                                        <SelectItem key={role.id} value={role.id}>
+                                            {label}
+                                        </SelectItem>
+                                    );
+                                })}
                             </SelectContent>
                         </Select>
                     </div>

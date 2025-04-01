@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { LayoutGrid, List } from "lucide-react"
 
-export function ProductsTabs() {
+const UsersTabs = () => {
     const pathname = usePathname()
     const isGridView = pathname.includes("/grid")
 
@@ -13,13 +13,13 @@ export function ProductsTabs() {
             <Tabs defaultValue={isGridView ? "grid" : "list"} className="w-auto">
                 <TabsList>
                     <TabsTrigger value="list" asChild>
-                        <Link href="/dashboard/products" className="flex items-center gap-1">
+                        <Link href="/dashboard/users" className="flex items-center gap-1">
                             <List className="h-4 w-4" />
                             <span className="hidden sm:inline">Lista</span>
                         </Link>
                     </TabsTrigger>
                     <TabsTrigger value="grid" asChild>
-                        <Link href="/dashboard/products/grid" className="flex items-center gap-1">
+                        <Link href="/dashboard/users/grid" className="flex items-center gap-1">
                             <LayoutGrid className="h-4 w-4" />
                             <span className="hidden sm:inline">Cuadrícula</span>
                         </Link>
@@ -29,3 +29,5 @@ export function ProductsTabs() {
         </div>
     )
 }
+
+export default UsersTabs;

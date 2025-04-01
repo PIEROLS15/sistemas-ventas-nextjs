@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import CreateSaleDialog from "@/components/layout/sales/createSaleDialog"
 import { SalesHeaderProps } from "@/types/sales";
+import useIsMobile from '@/hooks/useIsMobile'
+import SalesTabs from "@/components/layout/sales/salesTab"
 
 const SalesHeader = ({ fetchSales }: SalesHeaderProps) => {
     const [open, setOpen] = useState(false)
+    const isMobile = useIsMobile()
 
     // Función que se ejecutará después de crear una venta
     const handleSuccess = () => {
@@ -32,6 +35,8 @@ const SalesHeader = ({ fetchSales }: SalesHeaderProps) => {
                     </Button>
                 </div>
             </div>
+
+            {!isMobile && <SalesTabs />}
 
             <CreateSaleDialog open={open} onOpenChange={setOpen} onSuccess={handleSuccess} />
         </div>

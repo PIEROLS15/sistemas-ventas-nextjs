@@ -28,6 +28,18 @@ export interface UsersTableProps {
     fetchUsers: () => void;
 }
 
+export interface UserCardProps {
+    users: User;
+    fetchUsers: () => void;
+}
+
+export interface UsersGridProps {
+    users: User[];
+    loading: boolean;
+    error: string | null;
+    fetchUsers: () => void;
+}
+
 export interface UserDetailsDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void

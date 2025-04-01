@@ -18,7 +18,7 @@ import UserUpdateDialog from "@/components/layout/users/userUpdateDialog"
 import UserStatusDialog from "@/components/layout/users/userStatusDialog"
 import UserDetailsDialog from "@/components/layout/users/userDetailDialog"
 import { User, UsersTableProps } from '@/types/users'
-import { formatDateOnly } from '@/utils/productUtils'
+import { formatDateOnly, getRoleuser } from '@/utils/productUtils'
 import PaginationComponent from "@/components/layout/pagination";
 
 const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
@@ -77,13 +77,14 @@ const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
                             </TableHeader>
                             <TableBody>
                                 {currentUsers.map((users) => {
+                                    const userRole = getRoleuser(users.roleName);
                                     return (
                                         <TableRow key={users.id}>
                                             <TableCell className="font-medium text-center">{users.id}</TableCell>
                                             <TableCell className="text-center">{users.firstName}</TableCell>
                                             <TableCell className="text-center">{users.lastName}</TableCell>
                                             <TableCell className="text-center">{users.email}</TableCell>
-                                            <TableCell className="text-center">{users.roleName}</TableCell>
+                                            <TableCell className="text-center">{userRole.label}</TableCell>
                                             <TableCell className="text-center">
                                                 <Badge
                                                     variant={users.isActive === true ? "default" : "destructive"}
@@ -143,7 +144,6 @@ const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
                 </div>
             </CardFooter>
 
-            {/* Diálogos para CRUD */}
             {editUser &&
                 <UserUpdateDialog
                     open={!!editUser}
@@ -154,7 +154,6 @@ const UsersTable = ({ users, loading, error, fetchUsers }: UsersTableProps) => {
             }
 
             {statusUser && (
-
                 <UserStatusDialog
                     open={!!statusUser}
                     onOpenChange={(open) => !open && setStatusUser(null)}

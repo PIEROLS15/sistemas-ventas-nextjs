@@ -32,6 +32,7 @@ export const formatDateOnly = (date: string) => {
     }).format(new Date(date));
 };
 
+//Función para determinar el esado de la venta
 export const getStatusBadge = (status: string) => {
     switch (status) {
         case "Completed":
@@ -44,3 +45,18 @@ export const getStatusBadge = (status: string) => {
             return { label: status, variant: "secondary" as const }
     }
 }
+
+// Función para determinar el estado del usuario
+export const getStatusUser = (isActive: boolean) => {
+    if (isActive === false) return { label: "Inactivo", variant: "destructive" as const };
+    return { label: "Activo", variant: "default" as const };
+};
+
+export const getRoleuser = (roleName: string) => {
+    if (roleName === "Seller") {
+        return { label: "Vendedor", variant: "destructive" as const };
+    } else if (roleName === "Admin") {
+        return { label: "Administrador", variant: "default" as const };
+    }
+    return { label: "Desconocido", variant: "default" as const };
+};

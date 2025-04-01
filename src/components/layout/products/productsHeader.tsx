@@ -6,9 +6,12 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import ProductDialog from "@/components/layout/products/productsDialog"
 import { ProductsHeaderProps } from "@/types/products";
+import { ProductsTabs } from "@/components/layout/products/productsTab"
+import useIsMobile from '@/hooks/useIsMobile'
 
 const ProductsHeader = ({ fetchProducts }: ProductsHeaderProps) => {
     const [open, setOpen] = useState(false)
+    const isMobile = useIsMobile()
 
     // Función que se ejecutará después de crear o editar un producto
     const handleSuccess = () => {
@@ -33,7 +36,7 @@ const ProductsHeader = ({ fetchProducts }: ProductsHeaderProps) => {
                 </div>
             </div>
 
-            {/* <ProductsTabs /> */}
+            {!isMobile && <ProductsTabs />}
 
             <ProductDialog open={open} onOpenChange={setOpen} onSuccess={handleSuccess} />
         </div>

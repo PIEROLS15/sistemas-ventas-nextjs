@@ -53,7 +53,7 @@ export const navItemsMobile: NavItem[] = [
     },
     {
         title: "Usuarios",
-        href: "/dashboard/users",
+        href: "/dashboard/users/grid",
         icon: Users,
     },
     {

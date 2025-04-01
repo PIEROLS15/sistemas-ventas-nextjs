@@ -1,8 +1,11 @@
 "use client"
 
 import { Input } from "@/components/ui/input"
+import UsersTabs from "@/components/layout/users/usersTabs"
+import useIsMobile from '@/hooks/useIsMobile'
 
 export function UsersHeader() {
+    const isMobile = useIsMobile()
 
     return (
         <div className="space-y-4">
@@ -18,6 +21,7 @@ export function UsersHeader() {
                 </div>
             </div>
 
+            {!isMobile && <UsersTabs />}
         </div>
     )
 }
