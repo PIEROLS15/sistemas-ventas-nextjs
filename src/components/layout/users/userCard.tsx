@@ -28,20 +28,26 @@ export function UserCard({ users, fetchUsers }: UserCardProps) {
             <Card className="h-full flex flex-col">
                 <CardContent className="flex-1 pt-6">
                     <div className="space-y-3">
-                        <div className="flex justify-between items-start">
+                        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2">
                             <div>
                                 <h3 className="font-medium text-lg">{users.firstName} {users.lastName}</h3>
                                 <p className="text-sm text-muted-foreground">{users.email}</p>
                             </div>
-                            <Badge variant={userStatus.variant}>
+                            <Badge variant={userStatus.variant} className="w-max sm:w-auto">
                                 {userStatus.label}
                             </Badge>
                         </div>
                         <p className="text-2xl font-bold">{userRole.label}</p>
                     </div>
                 </CardContent>
-                <CardFooter className="flex justify-between border-t pt-4">
-                    <Button variant="outline" size="sm" onClick={() => setShowDetailsDialog(true)}>
+
+                <CardFooter className="flex flex-wrap md:flex-nowrap justify-between border-t pt-4 gap-2">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowDetailsDialog(true)}
+                        className="w-full md:w-auto"
+                    >
                         <Eye className="h-4 w-4 mr-1" />
                         Ver
                     </Button>
@@ -49,7 +55,7 @@ export function UserCard({ users, fetchUsers }: UserCardProps) {
                     <Button
                         onClick={() => setEditUser(users)}
                         variant="outline"
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 w-full md:w-auto"
                     >
                         <Pencil className="h-4 w-4" />
                         Editar rol
@@ -58,12 +64,11 @@ export function UserCard({ users, fetchUsers }: UserCardProps) {
                     <Button
                         onClick={() => setStatusUser(users)}
                         variant="outline"
-                        className="flex items-center gap-2"
+                        className="flex items-center gap-2 w-full md:w-auto"
                     >
                         <Power className="h-4 w-4" />
                         {users.isActive ? "Desactivar" : "Activar"}
                     </Button>
-
                 </CardFooter>
             </Card>
 
