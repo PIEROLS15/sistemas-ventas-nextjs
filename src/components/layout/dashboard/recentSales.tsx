@@ -44,11 +44,11 @@ const RecentSales: React.FC<{ className?: string }> = ({ className }) => {
                 <CardTitle>Ventas Recientes</CardTitle>
                 <CardDescription>Has realizado {sales.length} ventas</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="overflow-hidden w-full">
                 <div className="space-y-6">
                     {recentSales.map((sale) => (
-                        <div key={sale.id} className="flex items-center justify-between">
-                            <div className="flex items-center space-x-4">
+                        <div key={sale.id} className="flex flex-col md:flex-row md:items-center justify-between gap-2">
+                            <div className="flex items-center gap-2 md:gap-4">
                                 <Avatar>
                                     <AvatarFallback>
                                         {sale.customerName
@@ -62,7 +62,7 @@ const RecentSales: React.FC<{ className?: string }> = ({ className }) => {
                                     <p className="text-sm text-muted-foreground">{sale.email}</p>
                                 </div>
                             </div>
-                            <div className="flex items-center space-x-4">
+                            <div className="flex flex-wrap items-center gap-2 md:gap-4">
                                 {(() => {
                                     const { label, variant } = getStatusBadge(sale.status);
                                     return <Badge variant={variant}>{label}</Badge>;
@@ -76,6 +76,7 @@ const RecentSales: React.FC<{ className?: string }> = ({ className }) => {
                     ))}
                 </div>
             </CardContent>
+
         </Card>
     );
 };

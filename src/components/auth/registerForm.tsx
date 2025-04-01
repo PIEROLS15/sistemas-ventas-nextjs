@@ -4,13 +4,15 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { toast } from "sonner";
 import { signIn } from "next-auth/react";
 
 const RegisterForm = () => {
     const [isLoading, setIsLoading] = useState(false);
     const router = useRouter();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const [form, setForm] = useState({
         firstName: "",
@@ -78,8 +80,6 @@ const RegisterForm = () => {
         { id: "firstName", name: "firstName", label: "Nombres", type: "text", placeholder: "Ingresa tus nombres" },
         { id: "lastName", name: "lastName", label: "Apellidos", type: "text", placeholder: "Ingresa tus apellidos" },
         { id: "email", name: "email", label: "Correo electrónico", type: "email", placeholder: "Ingresa tu correo" },
-        { id: "password", name: "password", label: "Contraseña", type: "password", placeholder: "••••••••" },
-        { id: "confirmPassword", name: "confirmPassword", label: "Confirmar contraseña", type: "password", placeholder: "••••••••" },
     ];
 
     return (
@@ -90,6 +90,27 @@ const RegisterForm = () => {
                     <Input id={id} name={name} type={type} placeholder={placeholder} disabled={isLoading} onChange={handleChange} />
                 </div>
             ))}
+            <div className="space-y-2 relative">
+                <label htmlFor="password">Contraseña</label>
+                <div className="relative">
+                    <Input id="password" name="password" type={showPassword ? "text" : "password"} placeholder="••••••••" disabled={isLoading} onChange={handleChange} />
+                    <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowPassword(!showPassword)} tabIndex={-1}>
+                        {showPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                        <span className="sr-only">{showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
+                    </Button>
+                </div>
+            </div>
+
+            <div className="space-y-2 relative">
+                <label htmlFor="confirmPassword">Confirmar contraseña</label>
+                <div className="relative">
+                    <Input id="confirmPassword" name="confirmPassword" type={showConfirmPassword ? "text" : "password"} placeholder="••••••••" disabled={isLoading} onChange={handleChange} />
+                    <Button type="button" variant="ghost" size="sm" className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent" onClick={() => setShowConfirmPassword(!showConfirmPassword)} tabIndex={-1}>
+                        {showConfirmPassword ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+                        <span className="sr-only">{showConfirmPassword ? "Ocultar contraseña" : "Mostrar contraseña"}</span>
+                    </Button>
+                </div>
+            </div>
 
             <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (

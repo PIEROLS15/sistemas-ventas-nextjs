@@ -1,6 +1,6 @@
 import { useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { Users, Settings, LogOut } from "lucide-react";
+import { Users, LogOut } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,10 +52,6 @@ const DropdownProfile = () => {
                 <DropdownMenuItem>
                     <Users className="mr-2 h-4 w-4" />
                     <span>Perfil</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Configuración</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
