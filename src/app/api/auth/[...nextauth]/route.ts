@@ -56,6 +56,10 @@ const authOptions: NextAuthOptions = {
                     throw new Error("Usuario no encontrado");
                 }
 
+                if (!userFound.isActive) {
+                    throw new Error("Cuenta inactiva. Contacta con el administrador.");
+                }
+
                 const matchPassword = await bcrypt.compare(credentials.password, userFound.password);
                 if (!matchPassword) {
                     throw new Error("Contraseña incorrecta");
@@ -70,6 +74,7 @@ const authOptions: NextAuthOptions = {
                     role: userFound.role.name
                 };
             }
+
         })
     ],
     callbacks: {
