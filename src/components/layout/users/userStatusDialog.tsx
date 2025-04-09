@@ -24,10 +24,17 @@ const UserStatusDialog = ({ open, onOpenChange, user, onSuccess }: UserStatusDia
     async function onSubmit(data: User) {
         setIsLoading(true);
         try {
-            await updateStatusUser(user.id, isActivating, data);
+            const result = await updateStatusUser(user.id, isActivating, data);
+
+            if (!result.success) {
+                toast.error("Error", {
+                    description: result.message,
+                });
+                return;
+            }
 
             toast.success(`Usuario ${isActivating ? "activado" : "desactivado"}`, {
-                description: `El usuario ${data.firstName} ${data.lastName} ha sido ${isActivating ? "activado" : "desactivado"} correctamente.`
+                description: result.message,
             });
 
             onOpenChange(false);

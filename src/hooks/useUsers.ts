@@ -29,7 +29,6 @@ const useUser = () => {
 
     //Funcion para activar y desactivar usuarios
     const updateStatusUser = async (userId: number, isActivating: boolean, userData: Partial<User>) => {
-
         try {
             const response = await fetch(`/api/users/${userId}`, {
                 method: "PATCH",
@@ -42,13 +41,30 @@ const useUser = () => {
             const result = await response.json();
 
             if (!response.ok) {
-                throw new Error(result.error || "Error desconocido");
+                return {
+                    success: false,
+                    message: result.error || "Ocurrió un error al actualizar el usuario. Intenta nuevamente.",
+                };
             }
-            return { success: true, message: `El usuario ${userData.firstName} ${userData.lastName} ha sido actualizado correctamente.` }
 
-        } catch (error) {
-            void error
-            return { success: false, message: "Ocurrió un error al actualizar el estado del usuario. Intenta nuevamente." };
+            return {
+                success: true,
+                message: `El usuario ${userData.firstName} ${userData.lastName} ha sido ${isActivating ? "activado" : "desactivado"} correctamente.`,
+            };
+
+        } catch (error: unknown) {
+            let errorMessage = "Error de red. Intenta nuevamente.";
+
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+
+            return {
+                success: false,
+                message: errorMessage,
+            };
+        } finally {
+            setLoading(false);
         }
     }
 

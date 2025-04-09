@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from 'next-auth';
 
 export async function GET(
     request: NextRequest,
@@ -48,6 +50,15 @@ export async function PUT(
     request: NextRequest,
     context: { params: Promise<{ id: string }> }
 ) {
+    const session = await getServerSession(authOptions);
+
+    if (!session || session.user.roleId !== 1) {
+        return NextResponse.json(
+            { error: "No autorizado. Solo los administradores pueden modificar el rol del usuario." },
+            { status: 403 }
+        );
+    }
+
     const { id } = await context.params;
     const { roleId } = await request.json();
 
@@ -86,6 +97,27 @@ export async function PATCH(
     const { id } = await context.params;
 
     try {
+        const session = await getServerSession(authOptions);
+
+        if (!session || !session.user || !session.user.email) {
+            return NextResponse.json(
+                { error: 'No autorizado' },
+                { status: 401 }
+            );
+        }
+
+        // Busca el usuario autenticado en la base de datos
+        const requestingUser = await prisma.user.findUnique({
+            where: { email: session.user.email },
+        });
+
+        if (!requestingUser || requestingUser.roleId !== 1) {
+            return NextResponse.json(
+                { error: "No autorizado. Solo los administradores pueden modificar el estado del usuario." },
+                { status: 403 }
+            );
+        }
+
         const userId = Number(id);
         const body = await request.json();
         const { isActive } = body;
@@ -115,6 +147,7 @@ export async function PATCH(
         await prisma.$disconnect();
     }
 }
+
 
 export async function DELETE() {
     return NextResponse.json({ error: 'Método no permitido' }, { status: 405 });

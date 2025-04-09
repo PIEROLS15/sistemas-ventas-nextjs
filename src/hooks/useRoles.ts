@@ -42,7 +42,8 @@ export function useRoles(
             toast.error("Debes seleccionar un rol.");
             return;
         }
-        if (isLoading) return
+
+        if (isLoading) return;
 
         setIsLoading(true);
 
@@ -55,8 +56,10 @@ export function useRoles(
                 body: JSON.stringify({ roleId: selectedRole }),
             });
 
+            const result = await response.json();
+
             if (!response.ok) {
-                throw new Error("Error al actualizar el rol del usuario");
+                throw new Error(result.error || "Error al actualizar el rol del usuario");
             }
 
             toast.success("Usuario actualizado", {
@@ -65,10 +68,16 @@ export function useRoles(
 
             onOpenChange(false);
             onSuccess();
-        } catch (error) {
-            console.error("Error al actualizar el usuario:", error);
+
+        } catch (error: unknown) {
+            let errorMessage = "Ocurrió un error al actualizar el usuario. Intenta nuevamente.";
+
+            if (error instanceof Error) {
+                errorMessage = error.message;
+            }
+
             toast.error("Error", {
-                description: "Ocurrió un error al actualizar el usuario. Intenta nuevamente.",
+                description: errorMessage,
             });
         } finally {
             setIsLoading(false);
