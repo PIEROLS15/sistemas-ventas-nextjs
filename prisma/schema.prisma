@@ -8,18 +8,19 @@ datasource db {
 }
 
 model User {
-  firstName  String
-  lastName   String
-  email      String   @unique
-  password   String
-  resetToken String?
-  roleId     Int
-  id         Int      @id @default(autoincrement())
-  createdAt  DateTime @default(now())
-  isActive   Boolean  @default(true)
-  updatedAt  DateTime @updatedAt
-  Sale       Sale[]
-  role       Role     @relation(fields: [roleId], references: [id])
+  firstName           String
+  lastName            String
+  email               String    @unique
+  password            String
+  resetToken          String?
+  resetTokenExpiresAt DateTime?
+  roleId              Int
+  id                  Int       @id @default(autoincrement())
+  createdAt           DateTime  @default(now())
+  isActive            Boolean   @default(true)
+  updatedAt           DateTime  @updatedAt
+  Sale                Sale[]
+  role                Role      @relation(fields: [roleId], references: [id])
 }
 
 model Role {

@@ -1,6 +1,7 @@
 import Link from "next/link"
-import { ShoppingCart, Home, ArrowLeft, Search } from "lucide-react"
+import { ShoppingCart, Home, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import ThemeToggle from '@/components/ui/themeToggle'
 
 export default function NotFound() {
     return (
@@ -47,12 +48,13 @@ export default function NotFound() {
                             Volver al inicio
                         </Link>
                     </Button>
-                    <Button variant="outline" asChild size="lg" className="gap-2">
+                    {/* <Button variant="outline" asChild size="lg" className="gap-2">
                         <Link href="/dashboard">
                             <Search className="h-5 w-5" />
                             Buscar
                         </Link>
-                    </Button>
+                    </Button> */}
+                    <ThemeToggle />
                 </div>
             </div>
 

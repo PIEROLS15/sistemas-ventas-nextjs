@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2 } from "lucide-react"
 import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 const resetSchema = z.object({
     email: z.string().email({ message: "Correo electrónico inválido" }),
@@ -18,6 +19,7 @@ type ResetFormValues = z.infer<typeof resetSchema>
 
 const ResetPasswordForm = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const router = useRouter()
 
     const {
         register,
@@ -35,19 +37,36 @@ const ResetPasswordForm = () => {
         setIsLoading(true)
 
         try {
-            // Simulación de envío de correo
-            await new Promise((resolve) => setTimeout(resolve, 1500))
-            console.log("Reset password for:", data)
-            // Aquí iría la lógica real de recuperación
+            const res = await fetch("/api/auth/send-code-verification", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ email: data.email }),
+            })
+
+            const result = await res.json()
+
+            if (!res.ok) {
+                throw new Error(result.message || "Ocurrió un error al enviar el correo.")
+            }
+
             toast.success("Se ha enviado un correo con instrucciones para restablecer tu contraseña.")
             reset()
-        } catch (err) {
-            void err
-            toast.error("Ocurrió un error al enviar el correo. Intenta nuevamente.")
+            router.push("/reset-password")
+        } catch (err: unknown) {
+            if (err instanceof Error) {
+                console.error(err);
+                toast.error(err.message || "El código de verificación es inválido o ha expirado.");
+            } else {
+                console.error("Error desconocido", err);
+                toast.error("Ha ocurrido un error inesperado.");
+            }
         } finally {
             setIsLoading(false)
         }
     }
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
