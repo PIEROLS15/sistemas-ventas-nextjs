@@ -8,8 +8,9 @@ import RegisterForm from '@/components/auth/registerForm'
 import ResetPasswordForm from '@/components/auth/resetPasswordForm'
 import ThemeToggle from "@/components/ui/themeToggle"
 import { UserPlus, LogIn, KeyRound } from "lucide-react"
+import SocialFooter from "@/components/layout/socialFooter"
 
-export default function AuthForms() {
+const AuthForms = () => {
     const [activeTab, setActiveTab] = useState("login")
 
     return (
@@ -53,8 +54,10 @@ export default function AuthForms() {
                 </Tabs>
             </CardContent>
             <CardFooter className="flex justify-center border-t p-4">
-                <p className="text-sm text-muted-foreground">© {new Date().getFullYear()} Sistema de Ventas</p>
+                <SocialFooter />
             </CardFooter>
         </Card>
     )
 }
+
+export default AuthForms;

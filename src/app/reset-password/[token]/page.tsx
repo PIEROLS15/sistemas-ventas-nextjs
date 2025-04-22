@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import { use } from 'react';
-import { ResetPasswordForm } from "@/components/layout/reset-password/resetPasswordForm";
+import ResetPasswordForm from "@/components/layout/reset-password/resetPasswordForm";
 import {
     Card, CardContent, CardDescription, CardFooter,
     CardHeader, CardTitle
@@ -15,8 +15,8 @@ interface ResetPasswordPageProps {
     }>;
 }
 
-export default function ResetPasswordPage({ params }: ResetPasswordPageProps) {
-    const { token } = use(params); // ✅ Desestructuración correcta del token
+const ResetPasswordPage = ({ params }: ResetPasswordPageProps) => {
+    const { token } = use(params);
     const searchParams = useSearchParams();
     const email = searchParams.get('email') || '';
 
@@ -27,11 +27,11 @@ export default function ResetPasswordPage({ params }: ResetPasswordPageProps) {
                     <CardHeader className="space-y-1">
                         <div className="flex items-center justify-between">
                             <CardTitle className="text-2xl">Restablecer Contraseña</CardTitle>
+                            <ThemeToggle />
                         </div>
                         <CardDescription>
                             Ingresa tu nueva contraseña para recuperar el acceso a tu cuenta
                         </CardDescription>
-                        <ThemeToggle />
                     </CardHeader>
                     <CardContent>
                         <ResetPasswordForm token={token} email={email} />
@@ -46,3 +46,5 @@ export default function ResetPasswordPage({ params }: ResetPasswordPageProps) {
         </main>
     );
 }
+
+export default ResetPasswordPage;

@@ -39,7 +39,7 @@ interface ResetPasswordFormProps {
     email: string
 }
 
-export function ResetPasswordForm({ token, email }: ResetPasswordFormProps) {
+const ResetPasswordForm = ({ token, email }: ResetPasswordFormProps) => {
     const [isLoading, setIsLoading] = useState(false)
     const [showPassword, setShowPassword] = useState(false)
     const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -200,3 +200,5 @@ export function ResetPasswordForm({ token, email }: ResetPasswordFormProps) {
         </Form>
     )
 }
+
+export default ResetPasswordForm;

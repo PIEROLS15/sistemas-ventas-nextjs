@@ -2,6 +2,7 @@ import HeaderDashboard from "@/components/layout/header";
 import Sidebar from "@/components/layout/dashboard/sidebar";
 import { ReactNode } from 'react';
 import { Toaster } from "sonner"
+import DashboardSocialFooter from "@/components/layout/dashboardFooter";
 
 interface DashboardLayoutProps {
     children: ReactNode;
@@ -9,15 +10,18 @@ interface DashboardLayoutProps {
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
     return (
-        <div>
+        <div className="min-h-screen flex flex-col">
             <HeaderDashboard />
-            <div style={{ display: 'flex' }}>
+            <div className="flex flex-1">
                 <Sidebar />
-                <main style={{ flex: 1 }}>
-                    {children}
-                </main>
-                <Toaster richColors closeButton position="top-right" />
+                <div className="flex flex-col flex-1">
+                    <main className="flex-1 p-4">
+                        {children}
+                    </main>
+                    <DashboardSocialFooter />
+                </div>
             </div>
+            <Toaster richColors closeButton position="top-right" />
         </div>
     );
 }

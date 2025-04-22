@@ -2,11 +2,11 @@ import Link from "next/link"
 import { ShoppingCart, Home, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import ThemeToggle from '@/components/ui/themeToggle'
+import SocialFooter from "@/components/layout/socialFooter"
 
-export default function NotFound() {
+const NotFound = () => {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-background p-4 md:p-8 relative overflow-hidden">
-            {/* Fondo decorativo */}
             <div className="absolute inset-0 grid grid-cols-6 grid-rows-6 gap-4 opacity-[0.03] dark:opacity-[0.05] -z-10">
                 {Array.from({ length: 36 }).map((_, i) => (
                     <div key={i} className="flex items-center justify-center">
@@ -35,33 +35,32 @@ export default function NotFound() {
                     </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-                    <Button asChild size="lg" className="gap-2">
+                {/* Botones en columna en móvil y fila en escritorio */}
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-center gap-4 mt-8">
+                    <Button asChild size="lg" className="gap-2 w-full sm:w-auto">
                         <Link href="/dashboard">
                             <Home className="h-5 w-5" />
                             Ir al Dashboard
                         </Link>
                     </Button>
-                    <Button variant="outline" asChild size="lg" className="gap-2">
+                    <Button variant="outline" asChild size="lg" className="gap-2 w-full sm:w-auto">
                         <Link href="/">
                             <ArrowLeft className="h-5 w-5" />
                             Volver al inicio
                         </Link>
                     </Button>
-                    {/* <Button variant="outline" asChild size="lg" className="gap-2">
-                        <Link href="/dashboard">
-                            <Search className="h-5 w-5" />
-                            Buscar
-                        </Link>
-                    </Button> */}
-                    <ThemeToggle />
+
+                    <div className="flex justify-center sm:ml-4">
+                        <ThemeToggle />
+                    </div>
                 </div>
             </div>
 
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center text-sm text-muted-foreground">
-                <p>© {new Date().getFullYear()} Sistema de Ventas</p>
+            <div className="relative z-10 mt-16 sm:mt-20 text-center">
+                <SocialFooter showText={true} className="mb-2" />
             </div>
         </div>
     )
 }
 
+export default NotFound;
