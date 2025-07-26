@@ -8,6 +8,13 @@ export interface Product {
     updatedAt: string;
 }
 
+export type ProductInput = {
+    sku: string
+    name: string
+    price: number
+    stock: number
+}
+
 export interface ProductsHeaderProps {
     fetchProducts: () => void;
 }
