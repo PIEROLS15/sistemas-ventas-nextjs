@@ -1,43 +1,52 @@
 export interface User {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-    password: string;
-    resetToken: string;
-    roleId: number;
-    createdAt: string;
-    updatedAt: string;
-    isActive: boolean;
+    id: number
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    resetToken: string
+    roleId: number
+    createdAt: string
+    updatedAt: string
+    isActive: boolean
     role: {
-        id: number;
-        name: string;
-    };
-    roleName: string;
+        id: number
+        name: string
+    }
+    roleName: string
+}
+
+export interface UserInput {
+    firstName: string
+    lastName: string
+    email: string
+    password: string
+    roleId: number
+    isActive: boolean
 }
 
 export interface Role {
-    id: string;
-    name: string;
+    id: string
+    name: string
 }
 
 export interface UsersTableProps {
-    users: User[];
-    loading: boolean;
-    error: string | null;
-    fetchUsers: () => void;
+    users: User[]
+    loading: boolean
+    error: string | null
+    fetchUsers: () => void
 }
 
 export interface UserCardProps {
-    users: User;
-    fetchUsers: () => void;
+    users: User
+    fetchUsers: () => void
 }
 
 export interface UsersGridProps {
-    users: User[];
-    loading: boolean;
-    error: string | null;
-    fetchUsers: () => void;
+    users: User[]
+    loading: boolean
+    error: string | null
+    fetchUsers: () => void
 }
 
 export interface UserDetailsDialogProps {
@@ -47,15 +56,15 @@ export interface UserDetailsDialogProps {
 }
 
 export interface UserUpdateDialogProps {
-    open: boolean;
-    onOpenChange: (open: boolean) => void;
-    user: User;
-    onSuccess: () => void;
+    open: boolean
+    onOpenChange: (open: boolean) => void
+    user: User
+    onSuccess: () => void
 }
 
 export interface UserStatusDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     user: User
-    onSuccess: () => void;
+    onSuccess: () => void
 }
